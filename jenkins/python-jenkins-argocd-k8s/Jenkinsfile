@@ -10,8 +10,8 @@ pipeline {
         
         stage('Checkout'){
            steps {
-                git credentialsId: 'github-new', 
-                url: 'https://github.com/niyaz-hasan/sample.git',
+                git credentialsId: 'github-new',                     
+                url: 'https://github.com/niyaz-hasan/Devops-Tasks.git',
                 branch: 'main'
            }
         }
@@ -24,7 +24,7 @@ pipeline {
       }
       steps {
         script {
-            sh 'docker build -t ${DOCKER_IMAGE} .'
+            sh 'cd jenkins/python-jenkins-argocd-k8s && docker build -t ${DOCKER_IMAGE} .'
             def dockerImage = docker.image("${DOCKER_IMAGE}")
             docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
                 dockerImage.push()
@@ -36,14 +36,14 @@ pipeline {
         stage('Checkout K8S manifest SCM'){
             steps {
                 git credentialsId: 'github-new', 
-                url: 'https://github.com/niyaz-hasan/cicd-demo-manifests-repo.git',
+                url: 'https://github.com/niyaz-hasan/cicd-Argocd-manifests-repo.git',
                 branch: 'main'
             }
         }
         
         stage('Update Deployment File') {
         environment {
-            GIT_REPO_NAME = "cicd-demo-manifests-repo"
+            GIT_REPO_NAME = "cicd-Argocd-manifests-repo"
             GIT_USER_NAME = "niyaz-hasan"
         }
         steps {
